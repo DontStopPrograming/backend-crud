@@ -13,8 +13,10 @@ export const getEmployee = async (req, res) => {
 
 export const getEmployees = async ( req, res ) => {
    try {
-    const [rows] = await pool.query('SELECT * FROM employees WHERE id = ?', [req.params.id])
-    if (rows.length <= 0 ) return res.status(404).json({
+    const { id } = req.params
+    const [rows] = await pool.query('SELECT * FROM employees WHERE id = ?', [id,])
+    if (rows.length <= 0 ) 
+    return res.status(404).json({
     message: 'Employees not found'
    })
     res.json(rows[0])
