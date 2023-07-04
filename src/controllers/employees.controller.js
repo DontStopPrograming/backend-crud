@@ -15,10 +15,12 @@ export const getEmployees = async ( req, res ) => {
    try {
     const { id } = req.params
     const [rows] = await pool.query('SELECT * FROM employees WHERE id = ?', [id,])
-    if (rows.length <= 0 ) 
-    return res.status(404).json({
-    message: 'Employees not found'
-   })
+    if (rows.length <= 0 ){
+        return res.status(404).json({
+            message: 'Employees not found'
+           })
+    } 
+    
     res.json(rows[0])
    } catch (error) {
     return res.status(500).json({
@@ -45,12 +47,15 @@ export const creEmployees = async (req, res) => {
 
 export const delEmployees = async (req, res) => {
     try {
-        const [ result ] = await pool.query('SELECT * FROM employees WHERE id = ?', [req.params.id])
+        const { id } = req.params
+        const [ rows ] = await pool.query('DELETE FROM employees WHERE id = ?', [id])
 
-    if(result.affectedRows <= 0) return res.status(404).json({
-        message: 'Employees not found'
-    })
-
+    if(rows.affectedRows <= 0){
+        return res.status(404).json({
+            message: 'Employees not found'
+        })
+    } 
+    
     res.sendStatus(204)
     } catch (error) {
         return res.status(500).json({
